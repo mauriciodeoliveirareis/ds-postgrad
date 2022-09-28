@@ -13,7 +13,7 @@ install_packages <- function(pkg) {
 } # end installPackages()
 
 #Create the list of packages we need
-pkg_list = c("tidyverse")
+pkg_list = c("tidyverse", "gridExtra")
 #Call our function passing it the list of packages
 lapply(pkg_list, install_packages)
 #NOTE: Once installed we could just load tidyverse using the library command - library(tidyverse)
@@ -27,5 +27,10 @@ histogram + geom_histogram(fill="black",binwidth = 0.4) + labs(x = "Fear of stat
 
 
 #barplot by gender 
-bar <- ggplot(experimData, aes(sex, fost1))
+bar1 <- ggplot(experimData, aes(sex, fost1))
 bar + stat_summary(fun.y=mean, geom="bar")
+
+bar2 <- ggplot(experimData, aes(sex, fost1))
+bar + stat_summary(fun.y=mean, geom="bar")
+
+
