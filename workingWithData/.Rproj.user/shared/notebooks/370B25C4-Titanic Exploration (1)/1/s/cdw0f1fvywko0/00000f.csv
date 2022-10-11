@@ -1,4 +1,0 @@
-"0","if (!require('lattice')) install.packages('lattice')
-"
-"2","Loading required package: lattice
-"

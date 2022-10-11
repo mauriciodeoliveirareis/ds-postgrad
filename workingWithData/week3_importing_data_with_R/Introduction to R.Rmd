@@ -1,0 +1,486 @@
+---
+title: An R Markdown document converted from "week3_importing_data_with_R/Introduction
+  to R.ipynb"
+output: html_document
+---
+
+# Introduction to R
+
+The **R** language was originally aimed at statisticians, so you might find it works a little differently to the more developer-oriented languages you're used to. It's well worth investing the time to get comfortable with R, though; it's a very fast and easy-to-use programming language which will let you knock out visualisations and data-exploration scripts in next to no time. *Please read all the notebook running one cell at a time so that you can confirm that you understood the respective explanation.*
+
+## Table of Contents
+1. [The Basic Types in R](#basic-types)
+2. [Lists and Vectors](#lists-and-vectors)
+3. [Data Frames](#data-frames)
+
+## Basic Types in R <a name="basic-types"></a>
+
+R contains **3 basic data types**:
+
+* numeric
+* logical
+* character
+
+### Numeric Data Types
+Numeric data types can be further broken down into **integer** and **double** types. As with Python, integers are whole numbers with no decimal components. Doubles are R's equivalent to Python's float. R considers numeric values to be *doubles* by default (statisticians almost always end up with decimal places), if you specifically want an integer value you can add the **L** suffix (capital L) to the end of the number.
+
+*aside:* this convention stems from the fact that R uses 64 bits rather than 32 bits to store an integer, the largest integer you can write is thus 2^64. C uses 32 bits by default to store an integer and the larger-capacity 64-bit equivalent is referred to as a *Long*. Similarly, numbers with decimals are referred to as *floats* in C (floating point refers to the fact that the decimal can be in different positions within the number). Floats are represented with 32-bits, whereas a larger capacity 64-bit floating-point number is known as a *double*
+
+```{r}
+print(paste("Type of 4?", typeof(4)))
+print(paste("Type of 4L?", typeof(4L)))
+```
+
+Because of the way R (and Python) handles floating point (double) numbers, you can occasionally find very small errors in calculations. Consider the following code, for example
+
+```{r}
+print(paste("0.5 - 0.4 = ", 0.5 - 0.4))
+print(paste("0.5 - 0.4 == 0.1 ", 0.5 - 0.4 == 0.1)) # Really?
+```
+
+Although R is showing 0.1 as the result of the above subtraction, the actual value it's getting is 0.09999999999999998. By default, it will format these numbers to *appear to* round them to the nearest decimal place; but can have unexpected behaviour, as we've seen above. If you need to compare floats you are usually better using something like the **all.equal()** function which has a built-in tolerance for tiny differences due to floating-point rounding errors
+
+```{r}
+all.equal(0.5 - 0.4, 0.1) # That's more like it!
+```
+
+#### Numeric Operators
+
+R provides all the usual mathematical operators. It also includes the caret symbol (or hat) as the exponential operator (to the power of). The usual comparisons
+
+```{r}
+print(paste("5 + 3 = ", 5 + 3))
+print(paste("5 * 3 = ", 5 * 3))
+print(paste("5 - 3 = ", 5 - 3))
+print(paste("5 / 3 = ", 5 / 3))
+print(paste("5 %% 3 = ", 5 %% 3)) # the modulo operator ('%' in Python)
+print(paste("5 ^ 3 = ", 5 ^ 3))
+
+print(paste("5 == 3", 5 == 3))
+print(paste("5 != 3", 5 != 3))
+```
+
+#### Variable Assignment in R
+
+Unlike most programming language which use a single = symbol to assign a value to a variable, R uses **<-**. This is a less-than sign followed by a minus. This symbol was chosen because it looks like an arrow point from the value into the variable name. This will probably trip you up for a while but it's actually grown on me over time!
+
+```{r}
+x <- 8
+y <- 9
+```
+
+### Logical Data Types
+
+Logical data types (or bools in python-speak) are represented by the values TRUE or FALSE. The capitalisation is different to Python; this will probably trip you up for a while. If you're feeling lazy you can shorten a logical value to either **T** or **F**
+
+```{r}
+TRUE == T
+FALSE == F
+FALSE != TRUE
+```
+
+#### Logical Operators
+Logical data types can be combined in R using the & and | symbols. Beware that although the && and || symbols work, they have a slightly different meaning and can occasionally behave in unexpected ways, so stick to the single-symbol operators unless you know you want the double-symbol versions.
+
+```{r}
+T | F
+FALSE & TRUE
+(5 > 3) | (2 != 2)
+(6 == 7) & (5 >= 5)
+```
+
+### Character Data Types
+Python's *strings* are R's **characters**. R does provide some functionality for working with character data types, but Python is generally the go-to for any tasks involving heavy string-processing. As with Python strings can be delimited with either single quotes ' or double quotes ". 
+
+```{r}
+"Hello World" == 'Hello World'
+```
+
+#### Character Operations
+R does not allow you to add strings using the + operator. The **paste()** function will join multiple strings together. By default, paste() adds a space between each string. An optional parameter **sep** allows you to change the character(s) used to join the strings together. If you want to join strings with no seperator, the **paste0()** function can be used. Other common string operations are shown below.
+
+```{r}
+paste("Hello", "World")
+paste("Hello", "World", "Again", sep="")
+paste("Goodbye", "cruel", "world")
+
+paste0("Hello", "World") # This is equivalent to the following
+paste("Hello", "World", sep="")
+```
+
+```{r}
+nchar("Lucas")
+
+substr("hayneedlestack", 4, 9)
+
+toupper("upper case")
+
+tolower("LOWER CASE")
+```
+
+If we want to find a substring in a string we use the R function **grepl()**. This function is named after the linux command *grep* which does exactly this (the **l** is for *Logical* because the function returs True or False. 
+
+We pass a vector of characters to the grepl() function, and we get back a logical vector indicating which items matched.
+
+```{r}
+words <- c("hayneedlestack", "haystack", "needle and thread")
+grepl("needle", words)
+```
+
+### Factor Data Types
+
+*Factors* are useful in R when dealing with categorical data. Categorical data is data that can have one of a fixed range of values (or *levels*).
+
+```{r}
+roles <- factor(c('Lecturer', 'Student', 'Student', 'Teaching Assistant'))
+roles
+```
+
+Notice above that the factor can have only three possible values, *Lecturer*, *Student* or *Teaching Assistant*. This can be useful when working with large datasets because it stops us from accidentally adding an invalid value later due to a typo.
+
+R will pick all of the unique values in a vector when we create a factor and set these as the valid levels. If we want to control the levels manually we can specify them when we create the factor
+
+```{r}
+roles <- factor(c('Lecturer', 'Student', 'Student', 'Teaching Assistant'), levels=c('Lecturer', 'Student', 'Teaching Assistant', 'Course Chair'))
+roles
+```
+
+We can use the **levels()** function to check the potential values a factor can hold
+
+```{r}
+levels(roles)
+
+levels(roles) <- c('Lecturer', 'Student', 'Teaching Assistant', 'Course Chair', 'Head of School')
+roles
+```
+
+### Type Coercion
+
+You can also explicitly convert characters using the *as.\<type\>()* family of functions.
+
+```{r}
+as.character(T)
+as.character(1L)
+as.character(2.5)
+
+as.integer(TRUE)
+as.integer(FALSE)
+as.double(T)
+as.double(F)
+
+as.double(5L) 
+
+as.integer('lucas')
+```
+
+The **type()** function will return the type of any value as a string, but every **as.type()** function has an **is.type()** equivalent which can sometimes be easier to use
+
+```{r}
+x <- '25'
+
+if (!is.numeric(x)) {
+    print('value not numeric, converting')
+    x <- as.numeric(x)
+}
+
+x <- x * 2
+x
+```
+
+As you may have noticed, the character data type is the most flexible (everything can be converted to a character. The double type is the next most flexible (all ints can be converted to doubles with no loss of precision).
+
+The R coercion hierarchy can help us to understand how this works.
+
+![The R Coercion hierarchy](./coercion_hierarchy.png)
+
+Notice above that when we tried to convert a non-numeric character to a number R didn't crash. It gave us a warning but converted the character to the special value **NA**. *NA* stands for *not available* and is R's equivalent of Python's *None*.
+
+The biggest problem with *NA* values is that whenever they're used in an operation, the result is always *NA*. What is 3 + unknown? It's unknown! Many functions allow you to work around this by explicitly stating that you want to remove any NAs before calculating. There is also the **is.na()** function which allows you to check if a variable has the value NA.
+
+In general, it's good to **find your NAs early** and **deal with them thoughtfully**. NAs can have lots of different meanings in a dataset, it's not always appropriate to simply remove them, or even replace them with the average. Handling NAs correctly is a big part of the art of data wrangling.
+
+```{r}
+NA + 3 + 5 * 2
+
+sum(3, 6, 8, NA)
+
+sum(3, 6, 8, NA, na.rm=T)
+
+x <- 3
+y <- NA
+
+if (is.na(y)) {
+    z = x
+} else {
+    z = x + y
+}
+z
+```
+
+## Sequences, Lists And Vectors <a name="lists-and-vectors"></a>
+
+As with any data-wrangling-oriented language, you won't often find yourself working with individual values in R. We tend to deal with rows, columns, and tables (data-frames). When we want to work with collections of values in R, we can use either **lists** or **vectors**.
+
+### Sequences
+
+We can use the colon **:** operator in R to quickly generate a sequence of numbers. The colon operator creates a sequence from the number on the left, to the number on the right **inclusive**. 
+
+```{r}
+1:5
+10:5
+```
+
+The colon operator will only allow us to generate sequences going in steps of 1 (or -1), as this is a very commonly used sequence. However, really it's just shorthand for the following
+
+```{r}
+seq(1, 5)
+```
+
+The **seq()** function allows us to generate any type of sequence we like. It takes an optional named parameter **by**, which allows us to specify the step.
+
+```{r}
+evens <- seq(2, 20, by=2)
+evens
+```
+
+### Vectors
+
+Vectors are one of the fundamental data structures in R. We saw in Python that lists *allow* you to hold different types of values. In R, all values in vectors **must be of the same type**. Vectors can be created using the **c()** (combine) function. You can check how many elements a vector contains using the **length()** function.
+
+```{r}
+# Create vectors using the c() function
+primes <- c(1, 3, 5, 7)
+
+# Count elements using the length() function
+length(primes)
+
+# The seq() function returns a vector
+is.vector(1:10)
+```
+
+Vectors are *first class citizens* in R, and calculations involving vectors are easy to express in code, and highly optimized by the R runtime. Arithmetic operators in R are *Vectorized*, meaning if we operate on a vector and a scalar (single value) the output will be a vector where the value is the result of the operator being applied to each element of the input vector. That's a bit of a mouthful, so it might be easier to see it in action
+
+```{r}
+odds <- c(1, 3, 5, 7, 9, 11)
+evens <- odds + 1
+print(evens)
+
+squares <- (1:4) ^ 2
+print(squares)
+```
+
+If we perform an operation on two vectors of equal length, the output is a vector with the result of performing that operation on the **corresponding elements** of each vector
+
+```{r}
+c(1, 3, 5) * c(1, 2, 3)
+```
+
+These are the two most common use-cases of vector arithmetic. It is also possible to perform operations on vectors of different lengths. If you'd like to find out more about the ins and outs of vectorised arithmetic, see the [R documentation](https://cran.r-project.org/doc/manuals/R-intro.pdf) for further details.
+
+### Lists
+
+A list in R is very similar to a Python list. Lists allow us to store multiple different types of data. The **list()** function allows us to create a list.
+
+```{r}
+student <- list('d12345678', 1, 65.0, 63.0)
+student
+```
+
+We saw that in Python, lists are zero-indexed, meaning the first item in a list is in position 0, the second in position 1 etc. **R lists are one-indexed** (R was originally aimed at statisticians, not programmers, and statisticans have long known that counting from zero is a silly idea). The first item in a list is in position 1, the second in position 2 *etc.* We can return multiple elements from a list by using a vector to index it. This is known as list slicing.
+
+```{r}
+student[1]
+
+student[1:2]
+
+student[c(3, 4, 1)]
+```
+
+By default, square-bracket indexing will return a new list. If only a single item is selected, this will be a list with only one element. If we want to retrieve an individual value we can use the **double-square-bracket** notation. This, of course, only works with individual indices, and not with slicing
+
+```{r}
+student[[1]]
+student[[2]]
+```
+
+#### Negative Indexing
+In Python, negative indexing allows us to count back from the end of the list. In *R*, however, negative indexing allows us to **omit items**. from the result.
+
+```{r}
+names <- c("Lucas", "Jill", "Joe")
+print('omit the first')
+print(names[-1])
+print('omit the second and third')
+print(names[-2:-3])
+print("omit the first and third")
+print(names[c(-1, -3)])
+```
+
+If you supply a negative index, R will include everything other than the items you've specified. If you supply a positive index, R will only include items you've specified. It's not possible to mix negative and positive indexing (it would be unclear what you wanted to do)
+
+```{r}
+print(names[c(1, -3)]) # This won't work
+```
+
+#### Logical Indexing
+
+R also allows us to access items in a vector using *logical indexing*. A logical index allows us to pass in a boolean vector of the same size of the list or vector we're trying to access. R will return only the values corresponding to TRUE in the index vector.
+
+```{r}
+numbers <- 1:6
+index <- c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE)
+
+evens <- numbers[index]
+evens
+```
+
+The example above isn't particularly useful, but this is an extremely powerful feature in R. If we combine this with vectorised operations we get a very succint method of filtering data
+
+```{r}
+numbers <- 1:11
+print(numbers > 5) # This returns TRUE for each element greater than 5, FALSE otherwise
+index <- numbers > 5
+print(numbers[index])
+```
+
+Generally speaking, we don't bother creating a separate variable for our index vector. You're more likely to see the code condensed into a single line like this
+
+```{r}
+numbers <- 1:11
+greater.than.5 <- numbers[numbers > 5] # return all numbers greater than 5
+print("Greater than 5:")
+print(greater.than.5)
+evens <- numbers[numbers %% 2 == 0]
+print("Evens:")
+print(evens)
+```
+
+#### Named Lists
+
+We can also name elements within a list. These names are stored as metadata and can be used to retrieve values later. There are three ways we can add named properties to lists.
+
+1. We can provide the names when we create the list
+2. We can use the names() function to assign names to all values in an existing list
+3. We can use the $ notation to add a single named property to an existing list
+
+```{r}
+# 1. Specify names when we create the list
+micheal <- list(name="Micheál Martin", age=60, party="Fianna Fáil", inGovernment=TRUE)
+print(micheal)
+
+# 2. Add names to an existing list (must set all names at once)
+leo <- list("Leo Varadkar", 41, "Fine Gael", TRUE)
+names(leo) <- c("name", "age", "party", "inGovernment")
+print(leo)
+
+# 3. Add named properties one at a time
+marylou <- list()
+marylou$name <- "Mary Lou Mc Donald"
+marylou$age <- 51
+marylou$party <- "Sinn Féin"
+marylou$inGovernment <- FALSE
+print(marylou)
+```
+
+The **names()** function will return all of the names for a list. Notice in 2. above, we assigned a value to the result of names(). This is a strange idiom for people unfamiliar with R but it does crop up now and again. We can use the names() function to copy names from one list to another
+
+```{r}
+print(names(micheal))
+eamon <- list("Eamon Ryan", 57, "The Green Party", TRUE)
+names(eamon) <- names(micheal)
+print(eamon)
+```
+
+As with lists, vectors can be named (though this is less common). The syntax for naming vectors is exactly the same as that of naming lists.
+
+## Data Frames <a name="data-frames"></a>
+
+Data frames are the most common data structure you will encounter in R. Data frames are essentially tables containg rows and columns. Data frames are what makes R shine. They make for a very intuitive and easy way of dealing with tabular data, which is often a little clunky in other languages.
+
+One of the nice things about R is that it has built-in datasets we can load up straight from code. We'll use the built-in Iris dataset to look at how R handles data frames. The iris dataset comes from a statistical paper which demonstrated the use of statistical measurements in working out taxonomy. You'll probably come across the Iris dataset on-line, it's a common *sandbox* dataset for demonstrating code online.
+
+```{r}
+library(datasets)
+data(iris)
+print(paste("The iris variable holds a dataframe?", is.data.frame(iris)))
+print(paste("The Iris dataframe has ", nrow(iris), "rows"))
+print(paste("The Iris dataframe has ", ncol(iris), "columns"))
+print("Column Names:")
+print(names(iris))
+head(iris) # head() shows us the first 6 rows of the dataset
+```
+
+In any dataframe (as with pretty much any table structure) all values in a column must be of the same type, for example, a name column wil always be of character type. To think about this in terms of *R*, this means that every column in a data frame will be a **vector**.
+
+```{r}
+iris$Sepal.Length
+is.vector(iris$Sepal.Length)
+```
+
+A dataframe is really nothing more than a list of columns. It does have some additional functionality but really at bottom it's just a specialised list. Each column in a data frame has a name, so to be more precise, a dataframe is a **named list** where every item is a vector. You may have noticed above that we could get the column names from a dataframe using the names() function; the reason this works is because a dataframe is really just a named list. 
+
+We can check this using the is.list() function
+
+```{r}
+is.list(iris)
+```
+
+```{r}
+View(iris)
+```
+
+### Creating a Dataframe from Vectors
+
+We've used a built-in dataset above, but if you need to create a dataframe yourself, you can do it using the **data.frame()** method and passing in each of the columns
+
+```{r}
+name <- c('Micheál', 'Leo', 'Eamonn', 'Mary Lou')
+age <- c(60, 41, 51, 47)
+party <- c('Fianna Fáil', 'Fine Gael', 'Greens', 'Sinn Féin')
+inGovernment <- c(T, T, T, F)
+
+df <- data.frame(name, age, party, inGovernment)
+df$party <- as.factor(df$party) # Make Party a factor variable
+df
+```
+
+Generally speaking, we can access values in a dataframe using the following construction
+
+```r
+df[<row.index>,<column.index>]
+```
+
+We can use our square bracket notation and select the index of the row and column we want (you don't include the angle brackets in your code, I use them to show that you need to replace the contents with your own values). For example, to access the petal length (third column) of the first item in the iris dataset we'd use the following
+
+```{r}
+iris[1, 3]
+```
+
+All the usual rules of indexing apply here so we can perform more complicated operations. For example, to see the first two columns of the last five rows we use
+
+```{r}
+iris[1:5, 1:2]
+nrow(iris)
+```
+
+If we want to select all rows or all columns, we simply leave one side of the comma blank
+
+```{r}
+iris[,c(1, 4)]
+iris[-1:-100,]
+```
+
+Putting all of this together we can carry out some very advanced selection on datafrmes
+
+```{r}
+Sepal.Columns <- grepl("Sepal", names(iris))
+Virginica.Rows <- iris$Species == "virginica"
+result <- iris[Virginica.Rows, Sepal.Columns]
+head(result, n=3) ## only display the first 3 rows
+```
+
+```{r}
+# retrieve only rows with larger than average sepal length
+iris[iris$Sepal.Length > mean(iris$Sepal.Length),]
+```
+
