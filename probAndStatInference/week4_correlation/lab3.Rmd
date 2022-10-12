@@ -1,0 +1,103 @@
+```{r}
+#install prerequisite packages, and set workd dir
+library("rstudioapi")
+library(haven)
+library(ggplot2)
+
+setwd(dirname(getActiveDocumentContext()$path))
+install_packages <- function(pkg) { 
+  
+  # Install package if it is not already
+  if (!(pkg %in% installed.packages()[, "Package"])){ 
+    
+    install.packages(pkg, repos='http://cran.us.r-project.org')
+  }
+  
+  library(pkg, character.only = TRUE)
+  
+} # end installPackages()
+
+#Create the list of packages we need
+pkg_list = c("tidyverse", "ggpubr")
+#Call our function passing it the list of packages
+lapply(pkg_list, install_packages)
+
+```
+
+```{r}
+survey <- read_sav("survey.sav")
+
+#summary(survey)
+summary(survey$tposaff)
+```
+
+```{r}
+summary(survey$tpstress)
+```
+
+## Step 2: Try to write the code to investigate the following relationships using a Pearson correlation test
+
+#### Relationship between Total Positive Affect and Total Perceived Stress
+
+```{r}
+hist_tposaff <- ggplot(survey, aes(x=tposaff)) + geom_histogram(fill="black",binwidth = 0.4)
+hist_tpstress <- ggplot(survey, aes(x=tpstress)) + geom_histogram(fill="black",binwidth = 0.4)
+ggarrange(hist_tposaff, hist_tpstress, 
+          ncol = 2)
+```
+  
+The data from both variables looks from a normal distribution but is it?
+```{r}
+shapiro.test(survey$tposaff)
+```
+
+```{r}
+shapiro.test(survey$tpstress)
+```
+The data doesn't seem to belong to a normal distribution, which correlation method should I use?
+
+```{r}
+ggplot(survey, aes(x=tposaff, y=tpstress)) + geom_point() + geom_smooth(method=lm)
+```
+
+```{r}
+cor.test(survey$tposaff, survey$tpstress, method = "pearson")
+```
+```{r}
+cor.test(survey$tposaff, survey$tpstress, method = "kendall")
+```
+
+```{r}
+cor.test(survey$tposaff, survey$tpstress, method = "spearman")
+```
+
+
+#### Relationship between Total Life Satisfaction and Total Perceived Control of Internal States.
+
+```{r}
+ggplot(survey, aes(x=tlifesat, y=tpcoiss)) + geom_point() + geom_smooth(method=lm)
+
+```
+
+```{r}
+cor.test(survey$tlifesat, survey$tpcoiss, method = "pearson")
+```
+
+####	Relationship between Total Mastery and Total Optimism.
+
+```{r}
+ggplot(survey, aes(x=tmast, y=toptim)) + geom_point() + geom_smooth(method=lm)
+```
+
+
+```{r}
+cor.test(survey$tmast, survey$toptim, method = "pearson")
+```
+
+```{r}
+cor.test(survey$tmast, survey$toptim, method = "kendall")
+```
+
+```{r}
+cor.test(survey$tmast, survey$toptim, method = "spearman")
+```
