@@ -1,0 +1,6 @@
+PaymentMethodID, Description, HandlingCost
+1,Cash,0
+2,Master Card,0.05
+3,Visa,0.05
+4,Gold,0.15
+5,Contactless,0.02

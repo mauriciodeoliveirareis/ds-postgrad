@@ -1,0 +1,4 @@
+OrderLineID, TransactionID, ProductID, CashierID, PaymentTypeID, PromotionID, Qty, UnitSalesPrice
+1, #23447867, 1, 1, 1, 1, 2, 699.00
+2, #45663158, 2, 2, 2, 1, 1, 559.99
+3, #88135721, 3, 3, 3, 1, 1, 899.00

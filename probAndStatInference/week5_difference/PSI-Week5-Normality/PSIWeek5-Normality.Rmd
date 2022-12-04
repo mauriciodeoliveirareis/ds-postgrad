@@ -24,7 +24,9 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 #We need to load the file so that we can use it in R.
 
 #Either make sure both the script and the file are in the same folder or qualify the path to the file.
-setwd(dirname(getActiveDocumentContext()$path))
+current_path = rstudioapi::getActiveDocumentContext()$path
+setwd(dirname(current_path))
+
 survey <- read.table("survey.dat") 
 
 

@@ -15,7 +15,6 @@ editor_options:
 #We will pass it a list of packages we need, the function will parse this list and for 
 #each package listed it will first check to see if it is installed, if not it will install it,
 #and then load the package for use
-
 needed_packages <- c("pastecs", "tidyverse", "psych", "semTools", "FSA", "car", "coin", "rstatix", "effectsize")                      
 # Extract not installed packages
 not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
@@ -33,6 +32,9 @@ library(effectsize) #To calculate effect size for t-test
 
 ### SETUP
 ```{r}
+current_path = rstudioapi::getActiveDocumentContext()$path
+setwd(dirname(current_path))
+
 #We are using a .dat file (survey.dat) created from the SPSS file survey.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
 #http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
 #Results on a survey on well being

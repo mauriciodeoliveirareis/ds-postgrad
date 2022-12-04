@@ -1,0 +1,104 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C9022F5F-F443-1079-0B1F-AC2EDE61C7A9" name="DateTime">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:12:03 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<ordsAlias>table_1</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="dayNumberInMonth" id="904C9E56-C165-78F9-D940-84D76DDD6748">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT018</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="dayOfWeek" id="E0D16423-6168-2514-2F91-13892D124F94">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT018</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="isWeekday" id="B7A1BAD3-7339-AA34-EC44-E764A87F0E69">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="timestamp" id="6861CDEC-9EAB-105D-E320-19B342E8D95A">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="defaultFormat" id="479441F4-8585-A0A4-08C0-AC923E38B784">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>100</dataTypeSize>
+<ownDataTypeParameters>100,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="dateTimeId" id="E4889511-C67F-02CD-2B9A-01FD634617EE">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="E514B14F-6AAC-FD63-4442-4D45A786FDAD" name="DateTime_PK">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E4889511-C67F-02CD-2B9A-01FD634617EE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="71C67FC3-9051-1383-760A-0D0D5BFE6419" name="DateTime__UN">
+<createdBy>mauricio.reis</createdBy>
+<createdTime>2022-11-17 19:23:27 UTC</createdTime>
+<ownerDesignName>dbDiagram</ownerDesignName>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6861CDEC-9EAB-105D-E320-19B342E8D95A"/>
+<colUsage columnID="479441F4-8585-A0A4-08C0-AC923E38B784"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

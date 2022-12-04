@@ -1,0 +1,78 @@
+---
+title: "- Missing Data"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+
+#We are using a .dat file (survey.dat) created from the SPSS file survey.sav  taken from SPSS Survival Manual 6th Edition Julie Pallant
+#http://spss.allenandunwin.com.s3-website-ap-southeast-2.amazonaws.com/data-files.html#.Wb0vvnWP-po
+#Results on a survey on well being
+#We need to load the file so that we can use it in R.
+sdata <- read.table("survey.dat")
+
+#Setting the column names to be that used in the dataset
+colnames(sdata) <- tolower(colnames(sdata))
+
+needed_packages <- c("VIM", "tidyverse", "naniar")                      
+# Extract not installed packages
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed) 
+library("VIM")
+library("tidyverse")
+library("naniar")
+
+
+```
+## Visualise the missing data level and pattern
+```{r}
+
+#Our variables of interest are the nine continuous variables
+#We create a subset with just these variables
+
+varsint<-c("toptim",     "tmast", "tposaff", "tnegaff", "tlifesat", "tpstress","tslfest", "tmarlow" , "tpcoiss" )
+sdatasubset<-sdata[varsint]#create a subset of data with just the variables of interest
+summary(sdatasubset)#Get our summary statistics - these are just for us not for publication
+
+#We want to look at levels of missingness using the aggr function from the VIM package
+#We store the results in a variable called res 
+
+res<-summary(VIM::aggr(sdatasubset, sortVar=TRUE))$combinations
+
+#Output the most common combinations
+head(res[rev(order(res[,2])),])
+ 
+
+#We cab create a plot for our 9 variables of interest showing the percentage missing using vis_miss from the naniar package
+naniar::vis_miss(sdatasubset)
+
+
+#To look at the number of cases and the combinations of missingness you can use gg_miss_upset
+
+naniar::gg_miss_upset(sdatasubset)
+
+#tpcoiss alone is missing - 5 cases
+#tpstress is missing - 3 cases
+#tmarlow is missing - 2 cases
+#Then 1 case where all variables are missing
+#There are 2 cases where tnegaff, tpstress and toptim are missing 
+#etc.
+#*** There is no real pattern to this missing data
+
+#To look at patterns by group you need to include the grouping value as part of the sub-set
+#You can then look at the pattern using gg_mis_fct from naniar package
+
+varsint<-c("toptim",     "tmast", "tposaff", "tnegaff", "tlifesat", "tpstress","tslfest", "tmarlow" , "tpcoiss","smoke" )
+
+sdatasubset<-sdata[varsint]#create a subset of data with just the variables of interest
+
+naniar::gg_miss_fct(x = sdatasubset, fct = smoke)
+
+## You can create tables to look at patterns of missing data in continuous for nominal
+## Or use some of the packages available in  https://www.tidyverse.org/
+

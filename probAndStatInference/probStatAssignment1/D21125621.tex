@@ -1,0 +1,486 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\textbf{Student Number: D21125621}\\
+\textbf{Student Name: Mauricio de Oliveira Reis}\\
+\textbf{Programme Code: TU256/1}\\
+\textbf{Dataset Used: Bike Sharing Dataset Data Set}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{-1}
+\tightlist
+\item
+  Preliminaries
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# setwd as the folder where this script is in}
+\NormalTok{current\_path }\OtherTok{=}\NormalTok{ rstudioapi}\SpecialCharTok{::}\FunctionTok{getActiveDocumentContext}\NormalTok{()}\SpecialCharTok{$}\NormalTok{path}
+\FunctionTok{setwd}\NormalTok{(}\FunctionTok{dirname}\NormalTok{(current\_path))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Load and Install required packages }
+\NormalTok{install\_packages }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(pkg) \{ }
+  
+  \CommentTok{\# Install package if it is not already}
+  \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\NormalTok{(pkg }\SpecialCharTok{\%in\%} \FunctionTok{installed.packages}\NormalTok{()[, }\StringTok{"Package"}\NormalTok{]))\{ }
+    
+    \FunctionTok{install.packages}\NormalTok{(pkg, }\AttributeTok{repos=}\StringTok{\textquotesingle{}http://cran.us.r{-}project.org\textquotesingle{}}\NormalTok{)}
+\NormalTok{  \}}
+  
+  \FunctionTok{library}\NormalTok{(pkg, }\AttributeTok{character.only =} \ConstantTok{TRUE}\NormalTok{)}
+  
+\NormalTok{\} }\CommentTok{\# end installPackages()}
+
+\CommentTok{\#Create the list of packages we need}
+\NormalTok{pkg\_list }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"dplyr"}\NormalTok{, }\StringTok{"gridExtra"}\NormalTok{, }\StringTok{"vtable"}\NormalTok{)}
+\CommentTok{\#Call our function passing it the list of packages}
+\FunctionTok{lapply}\NormalTok{(pkg\_list, install\_packages)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'gridExtra'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     combine
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: kableExtra
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in !is.null(rmarkdown::metadata$output) && rmarkdown::metadata$output
+## %in% : 'length(x) = 2 > 1' in coercion to 'logical(1)'
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'kableExtra'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     group_rows
+\end{verbatim}
+
+\begin{verbatim}
+## [[1]]
+## [1] "ggplot2"   "stats"     "graphics"  "grDevices" "utils"     "datasets" 
+## [7] "methods"   "base"     
+## 
+## [[2]]
+## [1] "dplyr"     "ggplot2"   "stats"     "graphics"  "grDevices" "utils"    
+## [7] "datasets"  "methods"   "base"     
+## 
+## [[3]]
+##  [1] "gridExtra" "dplyr"     "ggplot2"   "stats"     "graphics"  "grDevices"
+##  [7] "utils"     "datasets"  "methods"   "base"     
+## 
+## [[4]]
+##  [1] "vtable"     "kableExtra" "gridExtra"  "dplyr"      "ggplot2"   
+##  [6] "stats"      "graphics"   "grDevices"  "utils"      "datasets"  
+## [11] "methods"    "base"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# library(ggplot2)}
+\CommentTok{\# library(dplyr)}
+\CommentTok{\# require(gridExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#load bike sharing dataset and check its head}
+\NormalTok{bike\_sharing }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"bikeSharingByDay.csv"}\NormalTok{, }\AttributeTok{header=}\NormalTok{T)}
+\FunctionTok{head}\NormalTok{(bike\_sharing)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   instant     dteday season yr mnth holiday weekday workingday weathersit
+## 1       1 2011-01-01      1  0    1       0       6          0          2
+## 2       2 2011-01-02      1  0    1       0       0          0          2
+## 3       3 2011-01-03      1  0    1       0       1          1          1
+## 4       4 2011-01-04      1  0    1       0       2          1          1
+## 5       5 2011-01-05      1  0    1       0       3          1          1
+## 6       6 2011-01-06      1  0    1       0       4          1          1
+##       temp    atemp      hum windspeed casual registered  cnt
+## 1 0.344167 0.363625 0.805833 0.1604460    331        654  985
+## 2 0.363478 0.353739 0.696087 0.2485390    131        670  801
+## 3 0.196364 0.189405 0.437273 0.2483090    120       1229 1349
+## 4 0.200000 0.212122 0.590435 0.1602960    108       1454 1562
+## 5 0.226957 0.229270 0.436957 0.1869000     82       1518 1600
+## 6 0.204348 0.233209 0.518261 0.0895652     88       1518 1606
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#summary Statistics}
+\FunctionTok{st}\NormalTok{(bike\_sharing)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-4}Summary Statistics}
+\centering
+\begin{tabular}[t]{llllllll}
+\toprule
+Variable & N & Mean & Std. Dev. & Min & Pctl. 25 & Pctl. 75 & Max\\
+\midrule
+instant & 731 & 366 & 211.166 & 1 & 183.5 & 548.5 & 731\\
+season & 731 & 2.497 & 1.111 & 1 & 2 & 3 & 4\\
+yr & 731 & 0.501 & 0.5 & 0 & 0 & 1 & 1\\
+mnth & 731 & 6.52 & 3.452 & 1 & 4 & 10 & 12\\
+holiday & 731 & 0.029 & 0.167 & 0 & 0 & 0 & 1\\
+\addlinespace
+weekday & 731 & 2.997 & 2.005 & 0 & 1 & 5 & 6\\
+workingday & 731 & 0.684 & 0.465 & 0 & 0 & 1 & 1\\
+weathersit & 731 & 1.395 & 0.545 & 1 & 1 & 2 & 3\\
+temp & 731 & 0.495 & 0.183 & 0.059 & 0.337 & 0.655 & 0.862\\
+atemp & 731 & 0.474 & 0.163 & 0.079 & 0.338 & 0.609 & 0.841\\
+\addlinespace
+hum & 731 & 0.628 & 0.142 & 0 & 0.52 & 0.73 & 0.973\\
+windspeed & 731 & 0.19 & 0.077 & 0.022 & 0.135 & 0.233 & 0.507\\
+casual & 731 & 848.176 & 686.622 & 2 & 315.5 & 1096 & 3410\\
+registered & 731 & 3656.172 & 1560.256 & 20 & 2497 & 4776.5 & 6946\\
+cnt & 731 & 4504.349 & 1937.211 & 22 & 3152 & 5956 & 8714\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hypertarget{does-the-temperature-actual-impact-the-total-number-of-bikes-hired-per-day}{%
+\subsection{1. Does the temperature (actual) impact the total number of
+bikes hired per
+day?}\label{does-the-temperature-actual-impact-the-total-number-of-bikes-hired-per-day}}
+
+\begin{itemize}
+\tightlist
+\item
+  Null hypothesis \((H_0)\): Temperature (actual) doesn't impact the
+  total number of bikes hired per day\\
+\item
+  Alternative hypothesis \(H_\alpha\): Temperature (actual) impacts the
+  total number of bikes hired per day\\
+\item
+  Significance level \(\alpha\): 0.05
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Check if there are NAs on the dataset}
+\NormalTok{bike\_sharing[}\SpecialCharTok{!}\FunctionTok{complete.cases}\NormalTok{(bike\_sharing),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] instant    dteday     season     yr         mnth       holiday   
+##  [7] weekday    workingday weathersit temp       atemp      hum       
+## [13] windspeed  casual     registered cnt       
+## <0 rows> (or 0-length row.names)
+\end{verbatim}
+
+Let's fist check the Daily temperature distribution and see how normal
+looking it's:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot\_with\_mean\_and\_median }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(plot, df, attribute) \{}
+  \FunctionTok{return}\NormalTok{(plot }\SpecialCharTok{+} \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{mean}\NormalTok{(df[[attribute]])),}\AttributeTok{col=}\StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{, }\AttributeTok{size=}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{median}\NormalTok{(df[[attribute]])),}\AttributeTok{col=}\StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\AttributeTok{size=}\DecValTok{1}\NormalTok{))}
+\NormalTok{\}}
+
+\CommentTok{\#Check distribution of temperature }
+\NormalTok{shapTestPValue }\OtherTok{\textless{}{-}} \FunctionTok{shapiro.test}\NormalTok{(bike\_sharing}\SpecialCharTok{$}\NormalTok{temp)}\SpecialCharTok{$}\NormalTok{p.value}
+\NormalTok{p1}\OtherTok{\textless{}{-}}\FunctionTok{qplot}\NormalTok{(bike\_sharing}\SpecialCharTok{$}\NormalTok{temp, }\AttributeTok{main =} \StringTok{"Daily temperature distribution"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Temperature (Normalized)"}\NormalTok{, }\AttributeTok{binwidth=}\FloatTok{0.05}\NormalTok{) }
+
+\FunctionTok{plot\_with\_mean\_and\_median}\NormalTok{(p1, bike\_sharing,}\StringTok{"temp"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{D21125621_files/figure-latex/unnamed-chunk-6-1.pdf}
+This distribution doesn't look that much like a normal one, even though
+the mean(red) and the median(blue) are quite close. In fact, the
+Shapiro-Wilk test gave a p-value of \texttt{shapTestPValue}, way below
+the 0.05 that would indicate a normal distribution.
+
+Let's also check how our users are distributed:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Check the amount of users for each type}
+\NormalTok{casualAndRegisteredDf }\OtherTok{\textless{}{-}}\NormalTok{ bike\_sharing }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(casual, registered)}
+\NormalTok{sumUserTypeDf}\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{value=}\FunctionTok{apply}\NormalTok{(casualAndRegisteredDf,}\DecValTok{2}\NormalTok{,sum))}
+\NormalTok{sumUserTypeDf}\SpecialCharTok{$}\NormalTok{key}\OtherTok{=}\FunctionTok{rownames}\NormalTok{(sumUserTypeDf)}
+\NormalTok{p }\OtherTok{\textless{}{-}}\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data=}\NormalTok{sumUserTypeDf, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{key, }\AttributeTok{y=}\NormalTok{value, }\AttributeTok{fill=}\NormalTok{key)) }\SpecialCharTok{+}
+\FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{colour=}\StringTok{"black"}\NormalTok{, }\AttributeTok{stat=}\StringTok{"identity"}\NormalTok{, }\AttributeTok{show.legend=}\ConstantTok{FALSE}\NormalTok{) }
+\NormalTok{p }\SpecialCharTok{+} \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Quantity of casual and registered users"}\NormalTok{, }\AttributeTok{x=}\StringTok{"Type of user"}\NormalTok{, }\AttributeTok{y=}\StringTok{"Quantity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{D21125621_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{totalCasual }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(bike\_sharing}\SpecialCharTok{$}\NormalTok{casual)}
+\NormalTok{totalRegistered }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(bike\_sharing}\SpecialCharTok{$}\NormalTok{registered)}
+\NormalTok{total }\OtherTok{\textless{}{-}}\NormalTok{ totalCasual }\SpecialCharTok{+}\NormalTok{ totalRegistered}
+\NormalTok{percentCasual }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(totalCasual }\SpecialCharTok{*} \DecValTok{100} \SpecialCharTok{/}\NormalTok{ total, }\DecValTok{2}\NormalTok{ )}
+\NormalTok{percentRegistered }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(totalRegistered }\SpecialCharTok{*} \DecValTok{100} \SpecialCharTok{/}\NormalTok{ total, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{percentCasual}\% of users are casual and
+\texttt{percentRegistered}\% are registered. As we can see, the vast
+majority of our users are registered users.
+
+How each type of user distribution looks like? (TODO shapiro-wild test
+those and read about the importance of normality to stablish
+correlation)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#create a new column with the sum of casual and registered uses}
+\NormalTok{bike\_sharing}\SpecialCharTok{$}\NormalTok{casualAndRegistered }\OtherTok{\textless{}{-}}\NormalTok{ bike\_sharing}\SpecialCharTok{$}\NormalTok{casual }\SpecialCharTok{+}\NormalTok{ bike\_sharing}\SpecialCharTok{$}\NormalTok{registered}
+
+\CommentTok{\#Check distribution of number of bikes hired per day }
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{plot\_with\_mean\_and\_median}\NormalTok{(}
+  \FunctionTok{qplot}\NormalTok{(bike\_sharing}\SpecialCharTok{$}\NormalTok{casual, }\AttributeTok{main =} \StringTok{"Daily casual users distribution"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Casual users"}\NormalTok{),}
+\NormalTok{  bike\_sharing,}
+  \StringTok{"casual"}\NormalTok{)}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{plot\_with\_mean\_and\_median}\NormalTok{(}
+  \FunctionTok{qplot}\NormalTok{(bike\_sharing}\SpecialCharTok{$}\NormalTok{registered, }\AttributeTok{main =} \StringTok{"Daily registered users distribution"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Registered users"}\NormalTok{),}
+\NormalTok{  bike\_sharing,}
+  \StringTok{"registered"}\NormalTok{)}
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{plot\_with\_mean\_and\_median}\NormalTok{(}
+  \FunctionTok{qplot}\NormalTok{(bike\_sharing}\SpecialCharTok{$}\NormalTok{casualAndRegistered, }\AttributeTok{main =} \StringTok{"Daily total users distribution"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Users"}\NormalTok{),}
+\NormalTok{  bike\_sharing,}
+  \StringTok{"casualAndRegistered"}\NormalTok{)}
+\FunctionTok{grid.arrange}\NormalTok{(p1, p2, p3, }\AttributeTok{nrow =} \DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{D21125621_files/figure-latex/unnamed-chunk-9-1.pdf}
+Daily casual users is a right skewed distribution whereas registered
+users is a little bit more normal looking. The combination of the two
+gives a more spread distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(bike\_sharing, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{temp, }\AttributeTok{y=}\NormalTok{casual)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method=}\NormalTok{lm) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Casual users vs. Temperature"}\NormalTok{, }\AttributeTok{x=}\StringTok{"Temperature"}\NormalTok{, }\AttributeTok{y=}\StringTok{"Quantity of Users"}\NormalTok{)}
+
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(bike\_sharing, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{temp, }\AttributeTok{y=}\NormalTok{registered)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method=}\NormalTok{lm) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Registered users vs. Temperature"}\NormalTok{, }\AttributeTok{x=}\StringTok{"Temperature"}\NormalTok{, }\AttributeTok{y=}\StringTok{"Quantity of Users"}\NormalTok{)}
+
+
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(bike\_sharing, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{temp, }\AttributeTok{y=}\NormalTok{casualAndRegistered)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method=}\NormalTok{lm) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"All users vs. Temperature"}\NormalTok{, }\AttributeTok{x=}\StringTok{"Temperature"}\NormalTok{, }\AttributeTok{y=}\StringTok{"Quantity of Users"}\NormalTok{)}
+
+\FunctionTok{grid.arrange}\NormalTok{(p1, p2, p3, }\AttributeTok{nrow =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+## `geom_smooth()` using formula 'y ~ x'
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\includegraphics{D21125621_files/figure-latex/unnamed-chunk-10-1.pdf}
+calculate as skewness and kutosis. If outside of + or -2, we convert the
+data to standardized score, and then we see how many rows fall outside
+3.29, if less than 5\% fall outside, we can treat as normal those two
+variables. Find in the slides how to report these findings. If both
+variables follow normal: pick pearson - A person correlation test was
+conducted\ldots{} If one or both are not normal, we can use spearman
+test - A spearman correlation was found ..
+
+if p 0.1 or 0.3 is weak\ldots{} if 0.5 and\ldots{} - Humidity 0 is
+missing data
+
+\begin{itemize}
+\item
+  working day, categorical varibla with two values, so this is a
+  \ldots{} test.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    use describeby for each of the groups of working day
+  \end{itemize}
+\item
+  If normal distribution, we use a t-test. If not normal, we use a
+  manwitney??Test
+\item
+  Use anova test if number of bikes is normally distributed for the per
+  weekday
+\item
+  weather situation related to season?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    two nominal variables, not ordinal
+  \item
+    chi-squared test
+  \end{itemize}
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,4 @@
+EmployeeNo, Name, StoreID, StartDate, FullTime
+1,Lucas Rizzo,1, 10/10/2015,1
+2,Frogo Baggins,2, 05/08/2014,1
+3,Sam Gamgee,3, 01/01/2019,0
