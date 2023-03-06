@@ -1,0 +1,413 @@
+---
+title: "Continuous Assessment Part II"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+**Student Number: D21125621**  
+**Student Name: Mauricio de Oliveira Reis**  
+**Programme Code: TU256/1**  
+**R Version: 4.2.1 (2022-06-23) - Platform: aarch64-apple-darwin20 (64-bit)**  
+**R Packages: "ggplot2","dplyr","kableExtra", "caret", "Hmisc" **  
+
+```{r}
+# setwd as the folder where this script is in
+current_path = rstudioapi::getActiveDocumentContext()$path
+setwd(dirname(current_path))
+set.seed(123)
+
+#Load and Install required packages 
+install_packages <- function(pkg) { 
+  
+  # Install package if it is not already
+  if (!(pkg %in% installed.packages()[, "Package"])){ 
+    
+    install.packages(pkg, repos='http://cran.us.r-project.org')
+  }
+  
+  library(pkg, character.only = TRUE)
+  
+} # end installPackages()
+
+#Create the list of packages we need
+pkg_list = c("ggplot2","dplyr","kableExtra", "caret", "Hmisc")
+
+#Call our function passing it the list of packages
+lapply(pkg_list, install_packages)
+
+
+
+```
+
+# Exploratory Data Analisys and Cleaning
+
+In this session is to understand the student dataset and identify if it needs some transformation:
+```{r, echo=FALSE, , message=FALSE, warning=FALSE}
+#load studentpartII dataset and check its head
+dfAll <- read.csv("studentpartII.csv", header=T)
+
+ncols <- ncol(dfAll)
+nrows <- nrow(dfAll)
+
+head(dfAll) %>% 
+  kbl(caption = "Table 1: First lines of Student Dataset") %>%
+  kable_styling()
+```
+  
+Table 1 shows a few lines of a dataset with 217 columns. 
+
+```{r, echo=FALSE, , message=FALSE, warning=FALSE}
+#Check if there are NAs on the dataset
+na_count <-sapply(dfAll, function(y) sum(length(which(is.na(y)))))
+na_count <- data.frame(na_count)
+na_count  %>% arrange(desc(na_count)) %>% slice(1:10)%>% 
+  kbl(caption = "Table 1.1: Quantity of NAs per column") %>%  
+  kable_styling()
+```
+
+Table 1.1 shows the top 10 columns with NA data, we can see that that there are no NAs on this dataset.  
+
+
+As we will use only the columns related to the IPIP Big-Five 50 item Questionnaire, let's create a new dataframe with this data 
+```{r}
+extraversion <- c(
+'E1',#          I am the life of the party.
+'E2',#          I don't talk a lot. REVERSE CODE
+'E3',#          I feel comfortable around people.
+'E4',#          I keep in the background. REVERSE CODE
+'E5',#          I start conversations.
+'E6',#          I have little to say. REVERSE CODE
+'E7',#          I talk to a lot of different people at parties.
+'E8',#          I don't like to draw attention to myself. REVERSE CODE
+'E9',#          I don't mind being the center of attention.
+'E10'#        I am quiet around strangers. REVERSE CODE
+)
+
+# creating reverse code cols array to use later for reverse code
+reverse_code_cols <- c('E2', 'E4', 'E6', 'E8', 'E10')
+
+agreeableness <- c(
+'A1',#          I feel little concern for others. REVERSE CODE
+'A2',#          I am interested in people.
+'A3',#          I insult people. REVERSE CODE
+'A4',#          I sympathize with others' feelings.
+'A5',#          I am not interested in other people's problems. REVERSE CODE
+'A6',#          I have a soft heart.
+'A7',#          I am not really interested in others. REVERSE CODE
+'A8',#          I take time out for others.
+'A9',#          I feel others' emotions. 
+'A10'#        I make people feel at ease.  
+)
+
+reverse_code_cols <- c(reverse_code_cols, 'A1','A3','A5','A7')
+
+conscientiousness <- c(
+'C1',#          I am always prepared. 
+'C2',#          I leave my belongings around. REVERSE CODE
+'C3',#          I pay attention to details.
+'C4',#          I make a mess of things. REVERSE CODE
+'C5',#          I get chores done right away.
+'C6',#          I often forget to put things back in their proper place. REVERSE CODE
+'C7',#          I like order.
+'C8',#          I shirk my duties. REVERSE CODE
+'C9',#          I follow a schedule.
+'C10'#        I am exacting in my work.
+)
+reverse_code_cols <- c(reverse_code_cols, 'C2','C4','C6','C8')
+
+neuroticism <- c(
+'N1',#          I get stressed out easily.
+'N2',#          I am relaxed most of the time. REVERSE CODE
+'N3',#          I worry about things. 
+'N4',#          I seldom feel blue. REVERSE CODE
+'N5',#          I am easily disturbed.
+'N6',#          I get upset easily.
+'N7',#          I change my mood a lot.
+'N8',#          I have frequent mood swings.
+'N9',#          I get irritated easily.
+'N10'#        I often feel blue.  
+)
+reverse_code_cols <- c(reverse_code_cols, 'N2','N4')
+
+openness <- c(
+'O1',#          I have a rich vocabulary. 
+'O2',#          I have difficulty understanding abstract ideas. REVERSE CODE
+'O3',#          I have a vivid imagination.
+'O4',#          I am not interested in abstract ideas. REVERSE CODE
+'O5',#          I have excellent ideas.
+'O6',#          I do not have a good imagination. REVERSE CODE
+'O7',#          I am quick to understand things.
+'O8',#          I use difficult words. 
+'O9',#          I spend time reflecting on things.
+'O10'#        I am full of ideas.
+)
+
+reverse_code_cols <- c(reverse_code_cols, 'O2','O4','O6')
+
+df <- select(dfAll, c(extraversion, agreeableness, conscientiousness, neuroticism, openness ))
+head(df) %>% 
+  kbl(caption = "Table 2: First lines of Student Dataset only with test columns") %>%
+  kable_styling()
+
+```
+  
+Table 2 now shows the dataset with only the columns we need for this work  
+  
+```{r}
+#Check if there are Zeros on the dataset
+na_count <-sapply(df, function(y) sum(length(which(y == 0))))
+na_count <- data.frame(na_count)
+top_missing <- (na_count  %>% arrange(desc(na_count)) %>% slice(1:1)) [[1]]
+top_missing_perc <- round((top_missing * 100) / nrows,2)
+na_count  %>% arrange(desc(na_count)) %>% slice(1:10) %>% 
+  kbl(caption = "Table 3: Quantity of missed answers on the dataset") %>%  
+  kable_styling()
+
+
+
+```
+Although we don't have any NAs, table 4 shows that we have a few missing answers, with the worst case scenario missing  `r top_missing` cases or `r top_missing_perc`% of the rows. As those are very small percentages, we've decided to transform this data into the mode of that column.
+
+```{r}
+# Function to find the mode
+findMode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+#for all columns 
+for (i in colnames(df)){
+  #if the columns has any occurence of zero
+  if (length(df[i][df[i] == 0]) > 0){
+    print (paste("looking at ", i))
+    columnMode <- findMode(df[,i])
+    print (paste("Zeros will be replaced by mode which is:", columnMode))
+    print(df[i][df[i] == 0])
+    #assign the mode of that columns to zero values
+    df[i][df[i] == 0] <- columnMode
+  }
+}
+```
+
+### Reverse coding  
+Many questions on the IPIP Big-Five 50 item Questionnaire are reverse coded, before aggregating these values, we need to treat these reverse coded values by using the following formula where maximumScore is 5:  
+
+$$ adjustedReverseCodingValue = maximumScore + 1 - originalScore $$
+
+
+
+```{r}
+#adjust reverse coded cols
+for (i in reverse_code_cols){
+  print(i)
+  df[i] <- 5 + 1 - df[i] 
+  
+}
+
+```
+# Dimension Reduction   
+  
+  
+## Develop hypotheses testable by dimension reduction using 30 of the variables in the dataset provided
+  
+For this piece of work, we will work with 30 variables from the questionnaire. The variables we will use are from the conscientiousness, neuroticism and openess parts of the questionnaire. The hypothesis that we want to check here is that the questions of those 3 items are actually just measuring a few characteristics of a person and could be grouped.
+-	Null Hypothesis: Those 30 variables within conscientiousness, neuroticism and openess, measure 30 completely distinct and unrelated characteristics or a person.  
+-	Alternative Hypothesis: Those 30 variables within conscientiousness, neuroticism and openess, measure less than 30 completely distinct unrelated characteristics of a person.  
+
+
+
+## Present appropriate statistical summaries of the variables chosen.
+
+First, the summary of each of the chosen variables:
+
+```{r}
+dfDR <- select(df, c(conscientiousness, neuroticism, openness ))
+summary(dfDR) %>% 
+  kbl(caption = "Table 4: Summary Statistics of Dataset with Dimension Reduction Applied") %>%
+  kable_styling()
+```
+Table 5 shows the summary statistics of the chosen variables. We can observe that this is a very heterogeneous group of variables with first quartile ranging from 1 all the way to 4 and the 3rd quartile ranging from 3 to 5.  
+Min and max values are 1 and 5 respectively, as expected, since this data has been treated and zeros got replaced by the mode.  
+
+## Assess the suitability of the dataset for dimension reduction.  
+- Quality of Data: this dataset has been cleaned up and, allegedely, contains real world data about a  IPIP Big-Five 50 item Questionnaire. We can assume on this work that this is high quality data.  
+- Sample size: this dataset has 382 rows which is more than enough to provide a stable factor solution (source: https://is.muni.cz/el/1423/podzim2014/PSY532/52195199/Reading_4_-_sample_size.pdf). We also get here a relation rows per columns of more than 10:1 given that we have 382 rows and we are utilizing only 30 columns from this dataset.  
+- Correlation between items:
+```{r}
+#create a correlation matrix
+dfDR_Matrix<-cor(dfDR)
+#round(dfDR_Matrix, 2)
+#Showing significance levels also
+#Hmisc::rcorr(as.matrix(dfDR))
+#Visualisation of correlations using circles
+#corrplot::corrplot(dfDR_Matrix, method="circle")
+#Visualisation using numbers
+#corrplot::corrplot(dfDR_Matrix, method="number")
+#Visualisation of significance levels at 0.05
+res1 <- corrplot::cor.mtest(dfDR_Matrix, conf.level = .95)
+corrplot::corrplot(dfDR_Matrix, p.mat = res1$p, sig.level = .05,  main = "\nPlot 1: Corr Plot for significance level .05")
+#Showing p-value for non-significant results
+#corrplot::corrplot(dfDR_Matrix, p.mat = res1$p, insig = "p-value")
+
+```
+From the plot above we can see that the correlation is mostly high among questions of the same letter but we can see correlations between questions of different letters too.  
+
+
+```{r}
+psych::cortest.bartlett(dfDR_Matrix, n=nrow(dfDR))
+```
+  
+The Barlett's test has a p-value so low that was reported as 0, and a chisq of 4449.18, this shows that there is a significant difference in the variances of the variables on this group.  
+
+```{r}
+REdaS::KMOS(dfDR)
+```
+With a KMO criterion of 0.86, we can conclude that this sampling is adequate for Factor Analysis (source: https://www.statisticshowto.com/kaiser-meyer-olkin/ )
+
+```{r}
+det(dfDR_Matrix)
+```
+The determinant is 0.00000603 a little bit more than just half of the threshold of 0.00001. This might indicate a completely independent item on the chosen data but, as the intention here is  doing a PCA, our main concern here is with the data reduction, therefore, an independent item may not be a problem. Given that, we will proceed with the analysis.  
+
+## Conduct Dimension Reduction  
+```{r}
+pc1 <-  psych::principal(dfDR, nfactors = length(dfDR), rotate = "none")
+#pc1#output all details of the PCA
+plot(pc1$values, type = "b", main = "Plot 2: Scree Plot for PCA") #scree plot
+
+```
+```{r}
+pcf=princomp(dfDR)
+factoextra::get_eigenvalue(pcf) %>% 
+  kbl(caption = "Table 6: Eigenvalues and Variances for PCA") %>%
+  kable_styling()
+```
+
+
+A Scree Plot (Plot 2) was utilized to decide how many factors should be used. The point of inflection occurs around 4. Table 6 in the other hand suggests, based on Eigenvalue > 1, that 9 components should be chosen. As we have n > 300, we've decided to stay with the results from the Scree Plot and choose 4 factors, those 4 factors amount for 50.76 of the variance from the 30 variables.
+
+```{r}
+facsol <- psych::fa(dfDR_Matrix, nfactors=4, obs=NA, n.iter=1, rotate="varimax", fm="pa")
+psych::fa.diagram(facsol, main = "Plot 3: Factor Analisys")
+```
+
+On plot 3 we can see the commonalities between the variables and the factors. As we can see, all of them are on or above 0.4
+
+
+```{r}
+# neuroticism openness
+conscientiousnessDf<-dfDR[,conscientiousness]
+neuroticismDf<-dfDR[,neuroticism]
+opennessDf<-dfDR[,openness]
+
+#Output our Cronbach Alpha values
+conscientiousnessAlpha <- psych::alpha(conscientiousnessDf,check.keys=TRUE)['total']$total$raw_alpha
+neuroticismAlpha <- psych::alpha(neuroticismDf,check.keys=TRUE)['total']$total$raw_alpha
+opennessAlpha <- psych::alpha(opennessDf,check.keys=TRUE)['total']$total$raw_alpha
+
+data.frame(conscientiousnessAlpha = conscientiousnessAlpha, neuroticismAlpha = neuroticismAlpha, opennessAlpha = opennessAlpha) %>% 
+  kbl(caption = "Table 7: Cronbach Alpha values") %>%
+  kable_styling()
+
+```
+As Table 7 is showing, conscientiousness, neuroticism and openess had high
+reliability, all Cronbach’s alpha > .80.
+
+
+With this analysis, we rejected the Null Hypothesis and we've concluded that we could indeed, group some of the characteristics captured by the questions about conscientiousness, neuroticism and openness.
+
+------------------------------
+
+# Linear Regression  
+In this part of the work we will look at how the possession and usage of vocabulary can impact creativity, in order to do that, we will look at what students answered on "O1 - I have a rich vocabulary" and "O8 - I use difficult words" as independent variables and try to predict what they've answered on "O10 - I am full of ideas". 
+
+Null Hypothesis: O1 and O8 are not related to O10, therefore you can't use it to predict what will be answered on O10.
+Alternative Hypothesis : O1 and/or O8 are related to O10 and can be used to predict what will be answered on O10.
+The initial model will be:
+$$O10_i = \beta_0 + \beta_1(O1) + \beta_2(O8) + \varepsilon_i  $$
+
+
+```{r}
+#Function to facilitate creation of an anovatab, extracted from my github: https://github.com/mauriciodeoliveirareis/Stat-Program-and-Applications-MATH9902/blob/main/linearGeneralRegModel/ca1/anovatab.R
+anovatab <-
+function(mod){
+  tab=as.matrix(anova(mod))
+  rows=dim(tab)[1]
+  moddf=sum(tab[,1])-tab[rows,1]
+  ssmodel=sum(tab[,2])-tab[rows,2]
+  msmodel=ssmodel/moddf
+  f=msmodel/tab[rows,3]
+  p=1-pf(f,moddf,tab[rows,1])
+  tab2=tab[(rows-1):rows,]
+  tab2[1,1:5]=c(moddf,ssmodel,msmodel,f,p)
+  tab2=rbind(tab2,c(moddf+tab2[2,1],ssmodel+tab2[2,2],rep(NA,3)))
+  rownames(tab2)=c('Model','Error','Total')
+  colnames(tab2)[1]='df'
+  return(print(tab2,na.print = "" , quote = FALSE,digits=3))
+}
+
+## fit  model
+fit1=lm(O10~O1+O8, data = df)
+print("Table 8: Linear Regression Model")
+summary(fit1)
+
+```
+The summary of our model shows very low p-values for O8, 2e-16, but quite high for O1 but, before considering that using difficult words doesn't have anything to do with being full of ideas, we should look if these isn't an interaction between answering O1 and O8. The next model will be this:
+$$O10_i = \beta_0 + \beta_1(O1) + \beta_2(O8) + \beta_3(O1 × O8) + \varepsilon_i  $$
+
+```{r}
+fit1=update(fit1,.~.+O1:O8)
+print("Table 9: Linear Regression Model with Iteraction")
+summary(fit1)
+```
+As we can see, there is a relevant interaction between O1 and O8 where, the higher both get, the lower is the score on O10. Now, all terms have a p-value below 0.05. Also, this model also has a slightly higher adjusted r-squared of 0.197 compared to the 0.19 from the previous model impling that it is capable of explaining 19.7% of the variance on O10.
+
+```{r}
+print("Table 10: Anova for Linear Regression Model with Iteraction")
+anova(fit1)
+```
+
+Although the regression model suggests that O1 is significant for the model, the ANOVA table tells us a different story, O1 here has a p-value of 0.39, way above 0.05. with that, we should try to see the performance of the model only utilizing O8.
+
+```{r}
+fit1=update(fit1,.~.-O1:O8)
+fit1=update(fit1,.~.-O1)
+print("Table 11: Linear Regression Model with single term")
+summary(fit1)
+```
+
+Here we can see that O8 stills significant (p-value of less than 2e-16 ) and this model still capable of explaining 19.15% of the variance on O10. In any case, we can we this model reject the null hypothesis and conclude taht O1 and/or O8 are related to O10 and can be used to predict it.
+
+# Logistic Regression  
+For this model, we will extend the work from the linear regression on predicting O10 based on O1 and O8 but, the approach here will be to predict only maximum scores (5) on O10 based on the presence or absence of maximum scores on O1 and O8.  
+
+To do this work, we will create a new column of each of those 3 columns that will take the value MAX if the score is 5 or NOT_MAX otherwise.
+
+Null Hypothesis: O1 and O8 Max Scores are not related to O10 Max Scores, therefore you can't use it to predict O10 Max Scores.
+Alternative Hypothesis : O1 and/or O8 Max Scores are related to O10 Max Scores and can be used to predict it.
+
+
+```{r}
+df$O1_MAX <- as.factor(with(df, ifelse(O1 == 5, 1, 0)))
+df$O8_MAX <- as.factor(with(df, ifelse(O8 == 5, 1, 0)))
+df$O10_MAX <- as.factor(with(df, ifelse(O10 == 5, 1, 0)))
+
+```
+
+
+The model utilized was this: 
+$$ \eta_i = \beta_0 + \beta_1 (O1_i) + \beta_1 (O8_i)$$  
+
+```{r}
+fit2=glm(O10_MAX~O1_MAX+O8_MAX, family=binomial(),data=df)
+print("Table 12: Logistic Regression Model")
+summary(fit2) 
+```
+
+The summary of model shows that max scores on both O1 and O8 contribute positively to have max scores on O10 but, and both are significant with p-values of 0.034 and less than 2e-16 respectively.
+
+With that, we reject the null hypothesis and conclude that O1 and O8 max scores can be utilized to predict O10 max scores.
+
+
+
