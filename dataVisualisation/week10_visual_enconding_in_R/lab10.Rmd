@@ -1,0 +1,124 @@
+---
+title: "Lab 10"
+
+date: "2023-04-17"
+author: "Mauricio Reis - D21125621"
+---
+
+
+```{r}
+needed_packages <- c("sqldf","ggplot2","ggtext")
+
+not_installed <- needed_packages[!(needed_packages %in% installed.packages()[ , "Package"])]    
+if(length(not_installed)) install.packages(not_installed) 
+
+library(sqldf)
+library(ggplot2)
+library(ggtext)
+```
+```{r}
+df <- read.csv("atp_number_1_modified.csv")
+head(df)
+```
+## 1. Which players have been number 1 for more than 150 weeks on average?  
+
+```{r}
+number1_for_more_150_week <- sqldf("SELECT MAX(Total_Weeks) max_weeks, Player, Sex 
+                                      FROM df 
+                                      WHERE Total_Weeks > 150 
+                                      GROUP BY Player, Sex")
+
+ggplot(number1_for_more_150_week, aes(x = max_weeks, y = reorder(Player, max_weeks), fill = Sex,)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  ggtitle("Players who were number 1 for more than 150 weeks") +
+  xlab("Weeks in Total") +
+  ylab("Player Name") +
+  labs(subtitle = "<span style='color:#00BFC4'>Male</span> | <span style='color:#F8766D'>Female</span>") +
+  theme(plot.title = element_text(face = "bold"), plot.subtitle = element_markdown(face = "bold"), legend.position = "none")
+
+
+```
+
+## 3.1 Show the youngest 10 players to achieve number 1 in bar chart.
+```{r}
+youngest_top1_players <- sqldf("SELECT Player, Age_days, Age_years,Sex 
+                                   FROM df 
+                                   GROUP BY Player,Sex 
+                                   ORDER BY Age_days 
+                                   LIMIT 10")
+
+ggplot(youngest_top1_players, aes(x = Age_years, y = reorder(Player, -Age_days), fill = Age_years)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  geom_text(aes(x = Age_years + 0.5, y = reorder(Player, -Age_days),
+                label = Age_years), size = 3) +
+  ggtitle("10 youngest players to achieve number 1") +
+  xlab("Player Age") +
+  ylab("Player Name") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+### 3.2 Show the youngest 10 players to achieve number 1 in polar coordinates
+```{r, fig.width=10, fig.height=8}
+ggplot(youngest_top1_players, aes(x = reorder(Player, -Age_days), y = Age_years, fill = Age_years)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  geom_text(aes(label = paste(Player, Age_years, sep = "\n")), 
+            position = position_stack(vjust = 1.20), size = 5.0, 
+            angle = 45, color = "black", fontface = "bold") +
+  ggtitle("10 youngest players to achieve number 1") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  coord_polar() +
+  theme_classic() +
+  theme(axis.text.x = element_blank(), 
+        axis.line = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        legend.position = "none",
+        plot.title = element_markdown(face = "bold", size = 20))
+
+```
+
+## 3.3 Show the youngest 10 players to achieve number 1 in polar coordinates color code by player 
+```{r, fig.width=10, fig.height=8}
+ggplot(youngest_top1_players, aes(x = reorder(Player, -Age_days), y = Age_years, fill = Player)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  geom_text(aes(label = paste(Player, Age_years, sep = "\n")), 
+            position = position_stack(vjust = 1.20), size = 5.0, 
+            angle = 45, color = "black", fontface = "bold") +
+  ggtitle("10 youngest players to achieve number 1") +
+  coord_polar() +
+  theme_classic() +
+  theme(axis.text.x = element_blank(), 
+        axis.line = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        legend.position = "none",
+        plot.title = element_markdown(face = "bold", size = 20))
+```
+
+### 3.4 Show the youngest 10 players to achieve number 1 in polar coordinates color code by gender 
+```{r, fig.width=10, fig.height=8}
+ggplot(youngest_top1_players, aes(x = reorder(Player, -Age_days), y = Age_years, fill = Sex)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  geom_text(aes(label = paste(Player, Age_years, sep = "\n")), 
+            position = position_stack(vjust = 1.20), size = 5.0, 
+            angle = 45, color = "black", fontface = "bold") +
+  ggtitle("10 youngest players to achieve number 1 by <span style='color:#00BFC4'>Male</span> and <span style='color:#F8766D'>Female</span>") +
+  coord_polar() +
+  theme_classic() +
+  theme(axis.text.x = element_blank(), 
+        axis.line = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        legend.position = "none",
+        plot.title = element_markdown(face = "bold", size = 20))
+
+```
+

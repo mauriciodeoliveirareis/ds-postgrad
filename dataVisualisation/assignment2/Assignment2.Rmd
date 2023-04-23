@@ -1,0 +1,36 @@
+---
+title: "Lab 10"
+
+date: "2023-04-23"
+author: "Mauricio Reis - D21125621"
+---
+
+```{r}
+current_path = rstudioapi::getActiveDocumentContext()$path 
+setwd(dirname(current_path ))
+
+df <- read.csv("ds_salaries.csv")
+head(df)
+
+```
+
+```{r}
+# Install and load the 'countrycode' package
+#install.packages("countrycode")
+#library(countrycode)
+
+
+iso3166ToCountryFullName <- function(countryNameInIso) {
+  iso_codes <- countryNameInIso
+
+  return(countrycode(sourcevar = iso_codes, origin = "iso2c", destination = "country.name"))
+}
+
+df$employee_residence = iso3166ToCountryFullName(df$employee_residence)
+
+df$company_location = iso3166ToCountryFullName(df$company_location)
+
+write.csv(df, "exploratoryDELETE.csv", row.names=FALSE)
+
+```
+
